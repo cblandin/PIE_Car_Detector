@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 def overlayGT(vidName, modName):
-    groundTruthLocation = "./output/groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
+    groundTruthLocation = "./groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
     gtList = []
     frameList = []
     for filename in os.listdir(groundTruthLocation):
@@ -44,7 +44,7 @@ def overlayGT(vidName, modName):
 if __name__ == '__main__':
 
     modelName = 'best_yolov8_custom_dataset.pt'
-    videoName = "video_0004.mp4"
-    overlayGT(modelName, videoName)
+    videoName = "video_0001_1min.mp4"
+    overlayGT(videoName, modelName)
 
 

@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
     modelName = 'best_yolov8_custom_dataset.pt'
     videoName = "video_0001_1min.mp4"
-    runCustomModel(modelName, videoName)
+    runCustomModel(videoName, modelName)
 
 
 
