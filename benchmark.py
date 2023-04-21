@@ -11,7 +11,11 @@ from project_common import getCentroid, getOverlap, getBoundingBox, notEnclosed,
 
 def benchmark(videoName, detectorWeights="yolov8n.pt"):
     model = YOLO(detectorWeights)
-    results = model.track('./videos/' + videoName, classes=[2], device=0, stream=True, conf=.25, iou=.7)
+    if detectorWeights == "best_yolov8_custom_dataset.pt":
+        cls = [0]
+    else:
+        cls = [2]
+    results = model.track('./videos/' + videoName, classes=cls, device=0, stream=True, conf=.25, iou=.7)
     resultsFile = open("./output/modelResults/results_benchmark" + "_" + os.path.splitext(detectorWeights)[0] + "_" +
                        os.path.splitext(videoName)[0] + ".txt", 'w')
 
