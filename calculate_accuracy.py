@@ -41,7 +41,7 @@ def calcAcc(vidName, modName):
                           os.path.splitext(vidName)[0] + ".txt")
     numFrames = modelOut.getNumFrames()
 
-    groundTruthLocation = "./output/groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
+    groundTruthLocation = "./groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
     frameAcc = 0.0
     gtObjectsProcessed = 0
     overNdx = False
@@ -79,4 +79,4 @@ if __name__ == '__main__':
     modelName = 'best_yolov8_custom_dataset.pt'
     videoName = "video_0004.mp4"
 
-    print(calcAcc(modelName, videoName))
+    print(calcAcc(videoName, modelName))
