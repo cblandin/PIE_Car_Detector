@@ -1,0 +1,12 @@
+---
+path: C:/PIE/vehicle_detection_dataset/
+train:
+  - train/images/video_0001
+  - train/images/video_0002
+  - train/images/video_0003
+val:
+  - valid/images/video_0001
+  - valid/images/video_0002
+nc: 1
+names:
+  - veh
