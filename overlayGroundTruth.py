@@ -2,8 +2,9 @@ import cv2
 import numpy as np
 import os
 
-def overlayGT(vidName, modName):
-    groundTruthLocation = "./groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
+def overlayGT(vidName, modName, groundTruthLocation=[]):
+    if not groundTruthLocation:
+        groundTruthLocation = "./groundTruthData/gt_" + os.path.splitext(vidName)[0][:10]
     gtList = []
     frameList = []
     for filename in os.listdir(groundTruthLocation):
@@ -15,12 +16,19 @@ def overlayGT(vidName, modName):
             gtFrameList = [line.split(" ") for line in gtFrameLines]
             frameList.append(int(gtFrameList[0][1]))
             gtList.append(gtFrameList)
+    if "/" in vidName:
+        inputVid = cv2.VideoCapture(vidName)
+    else:
+        inputVid = cv2.VideoCapture("./output/modelOutputVideos/output_" + os.path.splitext(modName)[0] + "_" + vidName)
 
-    inputVid = cv2.VideoCapture("./output/modelOutputVideos/output_" + os.path.splitext(modName)[0] + "_" + vidName)
     r, frame = inputVid.read()
     h, w, _ = frame.shape
-    outputVid = cv2.VideoWriter("./output/groundTruthOverlayVideos/gtVideo_" + os.path.splitext(modName)[0] + "_" + vidName
-                                , cv2.VideoWriter_fourcc(*'MP4V'), int(inputVid.get(cv2.CAP_PROP_FPS)), (w, h))
+    if "/" in vidName:
+        outputVid = cv2.VideoWriter(os.path.splitext(vidName)[0] + "_" + os.path.splitext(modName)[0] +"_gt_overlay.mp4"
+                                    , cv2.VideoWriter_fourcc(*'MP4V'), int(inputVid.get(cv2.CAP_PROP_FPS)), (w, h))
+    else:
+        outputVid = cv2.VideoWriter("./output/groundTruthOverlayVideos/gtVideo_" + os.path.splitext(modName)[0] + "_" +
+                                    vidName, cv2.VideoWriter_fourcc(*'MP4V'), int(inputVid.get(cv2.CAP_PROP_FPS)), (w, h))
 
     curFrame = 0
     while r:
@@ -44,7 +52,9 @@ def overlayGT(vidName, modName):
 if __name__ == '__main__':
 
     modelName = 'best_yolov8_custom_dataset.pt'
-    videoName = "video_0001_1min.mp4"
-    overlayGT(videoName, modelName)
+    # videoName = "video_0001_1min.mp4"
+    videoName = "./runs/detect/track2/video_0001_best_yolov8_custom_dataset_1min.mp4"  # For benchmark videos
+    gtLoc = "./groundTruthData/gt_video_0001"  # For benchmark
+    overlayGT(videoName, modelName, gtLoc)
 
 
