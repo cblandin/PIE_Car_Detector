@@ -9,9 +9,13 @@ from project_common import getCentroid, getOverlap, getBoundingBox, notEnclosed,
 
 
 
-def benchmark(videoName, detectorWeights="yolov8n.pt"):
+def benchmark(videoName, detectorWeights="yolov8n.pt", saveVideo=False):
     model = YOLO(detectorWeights)
-    results = model.track('./videos/' + videoName, classes=[2], device=0, stream=True, conf=.25, iou=.7)
+    if detectorWeights == "best_yolov8_custom_dataset.pt":
+        cls = [0]
+    else:
+        cls = [2]
+    results = model.track('./videos/' + videoName,save=saveVideo , classes=cls, device=0, stream=True, conf=.25, iou=.7)
     resultsFile = open("./output/modelResults/results_benchmark" + "_" + os.path.splitext(detectorWeights)[0] + "_" +
                        os.path.splitext(videoName)[0] + ".txt", 'w')
 
@@ -38,18 +42,19 @@ def benchmark(videoName, detectorWeights="yolov8n.pt"):
 
 
 if __name__ == '__main__':
-    detector = 'yolov8n.pt'
+    # detector = 'yolov8n.pt'
+    detector = 'best_yolov8_custom_dataset.pt'
     videoDirectory = "./videos"
-    allVid = True
-    videos = ["video_0001.mp4"]
+    allVid = False
+    videos = ["video_0001_1min.mp4"]
 
     if allVid:
         for filename in os.listdir(videoDirectory):
             f = os.path.join(videoDirectory, filename)
             if os.path.isfile(f) and f.endswith(".mp4"):
-                benchmark(detector, os.path.splitext(filename)[0])
+                benchmark(filename, detector)
     else:
         for videoName in videos:
             f = os.path.join(videoDirectory, videoName)
             if os.path.isfile(f) and f.endswith(".mp4"):
-                benchmark(detector, os.path.splitext(videoName)[0])
+                benchmark(videoName, detectorWeights=detector)
